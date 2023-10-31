@@ -1,7 +1,15 @@
+class RegistrationNumber:
+    def __init__(self, number: str, letters: str, region: int, country: str):
+        self.number, self.letters, self.region, self.country = \
+            number, letters, region, country
+
+    def __str__(self) -> str:
+        return f'{self.letters} {self.number} {self.region} {self.country}'
+
 class Car:
     service_classes = 'economy', 'comfort', 'comfort+', 'business', 'premium'
 
-    def __init__(self, model: str, reg_number: str, service_class: str) -> None:
+    def __init__(self, model: str, reg_number: RegistrationNumber, service_class: str) -> None:
         self.model, self.reg_number, self.service_class = model, reg_number, service_class
 
     @property

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from car import Car
 from utils import Checkers, Position
@@ -50,16 +50,30 @@ class Client(Person):
         self.balance -= amount
 
 class Driver(Person):
-    def __init__(self, name: str, car: Car = None) -> None:
-        super().__init__(name, balance=0.0)
+    __rating_per_class = 0.5
+
+    def __init__(self, name: str, car: Car = None, position: Position = None) -> None:
+        super().__init__(name, balance=0.0, position=position)
         self.car = car
+
+    @staticmethod
+    def check(driver: Any) -> None:
+        Checkers.check_type(driver, Driver)
 
     @property
     def car(self) -> Car | None:
         return self._car
-    
+
     @car.setter
     def car(self, new_car: Car) -> None:
         Checkers.check_type(new_car, Car)
         self._car = new_car
 
+    @property
+    def service_class(self) -> str:
+        fine = int((5.0 - self.rating) // self.__rating_per_class)
+        new_index = Car.service_classes.index(self.car.service_class) - fine
+        return Car.service_classes[new_index] if new_index >= 0 else Car.service_classes[0]
+
+    def __str__(self) -> str:
+        return f'{super().__str__()} {self.car}'
